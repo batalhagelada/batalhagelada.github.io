@@ -696,10 +696,10 @@ function construirFase(L){
 
 // ================= Heróis =================
 function addHeroi(){
-  if(G.herois.length>=2){G.n=Math.min(999,G.n+12);toast('Edu Dourado mandou reforço: +12');return;}
+  if(G.herois.length>=2){G.n=Math.min(999,G.n+12);toast('Guardião Dourado mandou reforço: +12');return;}
   const g=grupoDourado(1.7);nivelGrp.add(g);
   G.herois.push({g,hp:30,cd:0,lado:G.herois.length?1:-1});
-  toast('O Edu Dourado entrou na batalha!');som('heroi');
+  toast('O Guardião Dourado entrou na batalha!');som('heroi');
 }
 
 // ================= HUD =================
@@ -755,7 +755,7 @@ function perderSoldados(qtd,x,z){
   let resto=qtd-tira;
   while(resto>0&&!G.n&&G.herois.length){
     const h=G.herois[0];const d=Math.min(h.hp,resto);h.hp-=d;resto-=d;
-    if(h.hp<=0){particulas(h.g.position.x,1.5,h.g.position.z,0xFFC93C,14,5);nivelGrp.remove(h.g);G.herois.shift();toast('O Edu Dourado caiu!',true);}
+    if(h.hp<=0){particulas(h.g.position.x,1.5,h.g.position.z,0xFFC93C,14,5);nivelGrp.remove(h.g);G.herois.shift();toast('O Guardião Dourado caiu!',true);}
   }
   if(G.n<=0&&!G.herois.length)fimDeJogo(false);
 }
@@ -788,7 +788,7 @@ function impactoFogo(f){
   for(let i=0;i<vis;i++){const dx=G.cx+FORM[i].x-f.x1,dz=G.cz+FORM[i].z-f.z1;if(dx*dx+dz*dz<r2)c++;}
   let mortos=vis?Math.round(c*G.n/vis):0;
   if(mortos>0)mortos=Math.min(mortos,f.dano);
-  for(const h of G.herois){const dx=h.g.position.x-f.x1,dz=h.g.position.z-f.z1;if(dx*dx+dz*dz<r2*1.4){h.hp-=8;if(h.hp<=0){particulas(h.g.position.x,1.5,h.g.position.z,0xFFC93C,14,5);nivelGrp.remove(h.g);G.herois=G.herois.filter(x=>x!==h);toast('O Edu Dourado caiu!',true);}}}
+  for(const h of G.herois){const dx=h.g.position.x-f.x1,dz=h.g.position.z-f.z1;if(dx*dx+dz*dz<r2*1.4){h.hp-=8;if(h.hp<=0){particulas(h.g.position.x,1.5,h.g.position.z,0xFFC93C,14,5);nivelGrp.remove(h.g);G.herois=G.herois.filter(x=>x!==h);toast('O Guardião Dourado caiu!',true);}}}
   if(mortos>0){pop('−'+mortos,f.x1,1.2,f.z1,'ruim');perderSoldados(mortos);}
 }
 function aplicarPortal(p){
