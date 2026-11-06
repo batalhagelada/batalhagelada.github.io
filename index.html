@@ -158,14 +158,14 @@ body:not(.jogando) .hud,body:not(.jogando) .contador{display:none}
 <section class="tela" id="telaCadastro" hidden>
   <div class="caixa">
     <h2 class="titulo centro" style="font-size:2rem">Entre no ranking</h2>
-    <p class="txt centro">Crie seu apelido para disputar com os outros clientes da adega. Se você já joga o Adega do Edu Tycoon, use o mesmo cadastro.</p>
+    <p class="txt centro">Crie seu apelido para disputar com os outros clientes da adega. Com a senha, você continua de onde parou em qualquer celular.</p>
     <label class="campo"><span>Nome ou apelido</span><input id="cadNome" maxlength="20" autocomplete="nickname" placeholder="Como você quer aparecer no ranking"></label>
     <label class="campo"><span>Idade</span><input id="cadIdade" type="number" inputmode="numeric" min="1" max="120" placeholder="Sua idade"></label>
     <label class="campo"><span>Crie uma senha</span><input id="cadSenha" type="password" maxlength="30" autocomplete="new-password" placeholder="Mínimo 4 caracteres"></label>
     <label class="aceite"><input type="checkbox" id="cadAceite"><span>Li e aceito a <a href="privacidade.html" target="_blank" rel="noopener">política de privacidade</a>. Meu apelido, minha fase e meus pontos vão aparecer no ranking; a idade não aparece.</span></label>
     <p class="erro" id="cadErro" role="alert"></p>
     <button class="btn" id="btnCadastrar" type="button">Criar cadastro</button>
-    <button type="button" class="link-btn" id="btnIrEntrar">Já tenho cadastro (vale o do Tycoon): entrar</button>
+    <button type="button" class="link-btn" id="btnIrEntrar">Já tenho cadastro: entrar</button>
     <button type="button" class="link-btn" id="btnPularCadastro" style="color:var(--sub)">Jogar sem entrar no ranking</button>
   </div>
 </section>
@@ -173,7 +173,7 @@ body:not(.jogando) .hud,body:not(.jogando) .contador{display:none}
 <section class="tela" id="telaLogin" hidden>
   <div class="caixa">
     <h2 class="titulo centro" style="font-size:2rem">Entrar</h2>
-    <p class="txt centro">Use o apelido e a senha do seu cadastro da Adega do Edu.</p>
+    <p class="txt centro">Use o apelido e a senha do seu cadastro na Batalha Gelada.</p>
     <label class="campo"><span>Apelido</span><input id="logNome" maxlength="20" autocomplete="username" placeholder="Seu apelido"></label>
     <label class="campo"><span>Senha</span><input id="logSenha" type="password" maxlength="30" autocomplete="current-password" placeholder="Sua senha"></label>
     <p class="erro" id="logErro" role="alert"></p>
@@ -267,9 +267,9 @@ function checarMes(){const m=mesAtual();if(SV.mes!==m){SV.mes=m;SV.pontosMes=0;}
 checarMes();
 function salvar(){try{localStorage.setItem(CHAVE,JSON.stringify(SV));}catch(e){}}
 
-// ================= Ranking online (Supabase, o mesmo do Tycoon) =================
-const SUPABASE_URL='https://pigxqmdmhnagghdzwvmu.supabase.co';
-const SUPABASE_CHAVE='sb_publishable_kUvkWcIttr3dcKMyab3dOA_2jW0taoi';
+// ================= Ranking online (Supabase da Batalha Gelada) =================
+const SUPABASE_URL='https://nxccrsplywycylsrnray.supabase.co';
+const SUPABASE_CHAVE='sb_publishable_-vBV-_lyAK6eih3iFx-sCA_21RuckeC';
 const rankingAtivo=()=>/^https:\/\//.test(SUPABASE_URL)&&SUPABASE_CHAVE.length>20;
 async function rpc(nome,corpo){
   const h={'Content-Type':'application/json','apikey':SUPABASE_CHAVE};
@@ -1065,7 +1065,7 @@ function alternaSom(){SV.som=!SV.som;salvar();atualizaInicio();if(SV.som)som('cl
 let depoisCadastro='#telaInicio';
 function abrirCadastro(depois){depoisCadastro=depois;$('#cadErro').textContent='';mostrar('#telaCadastro');}
 function seguirDepoisCadastro(){atualizaInicio();if(depoisCadastro==='jogar')jogar();else{if(depoisCadastro==='#telaRanking'){abrirRanking();return;}mostrar(depoisCadastro);}}
-const msgCadastro={muitos_cadastros:'Muitos cadastros foram feitos desta internet hoje. Tente de novo amanhã.',apelido_em_uso:'Esse apelido já está em uso. Escolha outro, ou toque em "Já tenho cadastro" se ele for seu.',idade_minima:'Desculpe, os jogos da Adega do Edu são exclusivos para maiores de 18 anos.',apelido_invalido:'Use um apelido de 2 a 20 letras.',senha_invalida_formato:'A senha precisa ter de 4 a 30 caracteres.'};
+const msgCadastro={muitos_cadastros:'Muitos cadastros foram feitos desta internet hoje. Tente de novo amanhã.',apelido_em_uso:'Esse apelido já está em uso. Escolha outro, ou toque em "Já tenho cadastro" se ele for seu.',idade_minima:'Desculpe, os jogos da Adega do Edu são exclusivos para maiores de 18 anos.',apelido_invalido:'Use um apelido de 2 a 20 letras.',senha_invalida_formato:'A senha precisa ter de 4 a 30 caracteres.',idade_invalida:'Confira a idade digitada.'};
 $('#btnCadastrar').onclick=async()=>{
   const btn=$('#btnCadastrar');if(btn.disabled)return;
   const nome=$('#cadNome').value.replace(/\s+/g,' ').trim(),idade=parseInt($('#cadIdade').value,10),senha=$('#cadSenha').value,err=$('#cadErro');
@@ -1089,7 +1089,7 @@ $('#btnCadastrar').onclick=async()=>{
 $('#btnPularCadastro').onclick=()=>{SV.pulouCadastro=true;salvar();som('clique');seguirDepoisCadastro();};
 $('#btnIrEntrar').onclick=()=>{$('#logErro').textContent='';mostrar('#telaLogin');setTimeout(()=>$('#logNome').focus(),50);};
 $('#btnIrCadastro').onclick=()=>mostrar('#telaCadastro');
-const msgLogin={invalido:'Apelido ou senha incorretos.',bloqueado:'Muitas tentativas erradas. Espere 15 minutos e tente de novo.',sem_senha:'Esse apelido ainda não tem senha. Abra o Tycoon no aparelho onde ele foi criado e crie uma senha por lá.'};
+const msgLogin={invalido:'Apelido ou senha incorretos.',bloqueado:'Muitas tentativas erradas. Espere 15 minutos e tente de novo.'};
 $('#btnEntrar').onclick=async()=>{
   const btn=$('#btnEntrar'),err=$('#logErro'),nome=$('#logNome').value.trim(),senha=$('#logSenha').value;
   if(btn.disabled)return;
